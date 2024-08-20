@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class BannerAdvertisement extends Model
 {
     use HasFactory;
@@ -15,4 +16,13 @@ class BannerAdvertisement extends Model
         'type',
         'thumbnail'
     ];
+
+    public $casts = [
+        'is_active' => 'string',
+    ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 'active');
+    }
 }

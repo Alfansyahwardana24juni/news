@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str; // Tambahkan ini
+use Illuminate\Database\Eloquent\SoftDeletes as EloquentSoftDeletes;
+use Iluminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
@@ -14,15 +16,17 @@ class Category extends Model
     protected $fillable = [
         'name',
         'slug',
-        'icon'
+        'icon',
     ];
 
-    public function setNameAttribute($value){
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
-        $this->attributes['slug'] = Str::slug($value); // Gunakan helper Str
+        $this->attributes['slug'] = Str::slug($value);
     }
 
-    public function news(): HasMany {
+    public function news(): HasMany
+    {
         return $this->hasMany(ArticleNews::class);
     }
 }
