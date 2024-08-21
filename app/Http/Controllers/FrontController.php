@@ -29,10 +29,18 @@ class FrontController extends Controller
         $authors = Author::all();
 
         $bannerads = BannerAdvertisement::where('is_active', 'active')
-        ->where('type', 'thumbnail')
+        ->where('type', 'banner')
         ->inRandomOrder()
         ->first();
 
-        return view('front.index', compact('categories', 'articles', 'authors', 'featured_articles', 'bannerads'));
+        $entertainment_articles = ArticleNews::whereHas('category', function ($query) {
+            $query->where('name', 'Entertainment');
+        })
+        ->where('is_featured', 'not_featured')
+        ->latest()
+        ->take(6)
+        ->get();
+
+        return view('front.index', compact('entertainment_articles','categories', 'articles', 'authors', 'featured_articles', 'bannerads'));
     }
 }
