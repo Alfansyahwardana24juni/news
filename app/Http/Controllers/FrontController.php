@@ -29,7 +29,7 @@ class FrontController extends Controller
         $authors = Author::all();
 
         $bannerads = BannerAdvertisement::where('is_active', 'active')
-        ->where('type', 'banner')
+        ->where('type')
         ->inRandomOrder()
         ->first();
 
@@ -41,6 +41,20 @@ class FrontController extends Controller
         ->take(6)
         ->get();
 
-        return view('front.index', compact('entertainment_articles','categories', 'articles', 'authors', 'featured_articles', 'bannerads'));
+        $entertainment_featured_articles = ArticleNews::whereHas('category', function ($query) {
+            $query->where('name', 'Entertainment');
+        })
+        ->where('is_featured', 'featured')
+        ->inRandomOrder()
+        ->first();
+
+        $business_featured_articles = ArticleNews::whereHas('category', function ($query) {
+            $query->where('name', 'Business');
+        })
+        ->where('is_featured', 'featured')
+        ->inRandomOrder()
+        ->first();
+
+        return view('front.index', compact('business_featured_articles','entertainment_featured_articles','entertainment_articles','categories', 'articles', 'authors', 'featured_articles', 'bannerads'));
     }
 }
